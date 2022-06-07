@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
     List<Cliente>findByNome(String nome);
-    List<Cliente>findByEmail(String email);
+    Cliente findByEmail(String email);
 //    List<Cliente>findByNomeContaining(String nome);
     
 }

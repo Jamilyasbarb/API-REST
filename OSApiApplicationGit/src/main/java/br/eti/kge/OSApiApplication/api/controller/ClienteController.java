@@ -8,6 +8,7 @@ package br.eti.kge.OSApiApplication.api.controller;
 import br.eti.kge.OSApiApplication.domain.model.Cliente;
 
 import br.eti.kge.OSApiApplication.domain.repository.ClienteRepository;
+import br.eti.kge.OSApiApplication.domain.service.ClienteService;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -33,6 +34,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
     
+    @Autowired
+    private ClienteService clienteService;
+    
     @GetMapping("/clientes")
     public List<Cliente> listas(){
        //Linguagem JPQL (Tipo sql só que Jakarta)
@@ -41,7 +45,7 @@ public class ClienteController {
     }
     
     @GetMapping("/clientes/email/{clienteEmail}")
-    public  List<Cliente> buscarEmail(@PathVariable String clienteEmail){
+    public  Cliente buscarEmail(@PathVariable String clienteEmail){
         return clienteRepository.findByEmail(clienteEmail);
     }
     
@@ -59,7 +63,7 @@ public class ClienteController {
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@Valid @RequestBody Cliente cliente){
-        return clienteRepository.save(cliente);
+        return clienteService.salvar(cliente);
     }
     
     @PutMapping("/clientes/{clienteId}")
@@ -68,8 +72,8 @@ public class ClienteController {
         if (!clienteRepository.existsById(clienteId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O Cliente informado não existe");
         }
-        
-        cliente = clienteRepository.save(cliente);
+        cliente.setId(clienteId);
+        cliente = clienteService.salvar(cliente);
         return ResponseEntity.ok(cliente);
     }
     
@@ -79,7 +83,7 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
         }
         
-        clienteRepository.deleteById(clienteId);
+        clienteService.excluir(clienteId);
         return ResponseEntity.noContent().build();
     }
 }
