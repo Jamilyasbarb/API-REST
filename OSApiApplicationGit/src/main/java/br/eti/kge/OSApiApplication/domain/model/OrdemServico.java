@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class OrdemServico {
-
+    
     public OrdemServico(Cliente cliente, String descricao, BigDecimal preco) {
         this.cliente = cliente;
         this.descricao = descricao;
@@ -33,7 +33,7 @@ public class OrdemServico {
     public OrdemServico() {
     }
     
-    
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
