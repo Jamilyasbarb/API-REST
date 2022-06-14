@@ -9,7 +9,9 @@ import br.eti.kge.OSApiApplication.domain.model.OrdemServico;
 import br.eti.kge.OSApiApplication.domain.model.StatusOrdemServico;
 import br.eti.kge.OSApiApplication.domain.repository.OrdemServicoRepository;
 import java.time.LocalDateTime;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,5 +29,30 @@ public class OrdemServicoService {
         ordemServico.setDataAbertura(LocalDateTime.now());
         
         return ordemServicoRepository.save(ordemServico);
+    }
+    
+    public ResponseEntity<OrdemServico> cancela(OrdemServico ordemServico){
+        ordemServico.setStatus(StatusOrdemServico.CANCELADA);
+        ordemServico.setDataAbertura(ordemServico.getDataAbertura());
+        ordemServico.setDataFinalizada(LocalDateTime.now());
+        
+        ordemServicoRepository.save(ordemServico);
+        
+        return ResponseEntity.ok(ordemServico);
+    }
+    
+    public ResponseEntity<OrdemServico> finaliza(OrdemServico ordemServico){
+        ordemServico.setStatus(StatusOrdemServico.FINALIZADA);
+       
+        ordemServico.setDataFinalizada(LocalDateTime.now());
+        
+        
+        ordemServicoRepository.save(ordemServico);
+        
+        return ResponseEntity.ok(ordemServico);
+    }
+    
+    public void excluir (Long ordemId){
+        ordemServicoRepository.deleteById(ordemId);
     }
 }
